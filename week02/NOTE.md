@@ -82,7 +82,7 @@ get : 1                get 后面跟的：，表示get是个属性名
 <MixedExpression> "/" <ParenthesesExpress>
 
 // 括号
-<ParenthesesExpress> :=  <AdditionExpression> | "(" <AdditionExpression> ")"
+<ParenthesesExpress> :=  <AdditionExpression> | "(" <ParenthesesExpress> ")"
 
 // 加减
 <AdditionExpression> := <MultiplicationExpression> |
