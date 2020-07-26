@@ -106,6 +106,7 @@ console.log(findString('abababx'))
 - 流
 - 端口, 计算机的网卡根据端口把接到的数据包分给各个应用的
 - reuqire('net')， node里面的包
+
 2、IP
 - 包
 - IP地址
@@ -183,7 +184,7 @@ ResponseParser来“装配”
 - 在HTML标准中，已经规定了HTML的状态
 - Toy-Browser只挑选其中一部分状态，完成一个最简版本
 
-[参考链接](https://html.spec.whatwg.org/multipage/parsing.html #before-attribute-name-state)
+[参考链接](https://html.spec.whatwg.org/multipage/parsing.html#before-attribute-name-state)
 
 3、解析标签
 - 主要的标签有:开始标签，结束标签和自封闭标签
