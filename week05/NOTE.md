@@ -86,7 +86,7 @@ div .class #id : [0,1,1,1]
 - 实际浏览器中，文字绘制是难点，需要依赖字体库，我们这里忽略
 - 实际浏览器中，还会对一些图层做compositing，我们这里也忽略了
 
-![浏览器中的viewport](./toyBroswer/img/WX20200801-222404@2x.png)
+![浏览器中的viewport](./toyBroswer/img/WX20200802-160519@2x.png)
 
 
 ![本地生成的viewport](./toyBroswer/img/viewport.jpg)
