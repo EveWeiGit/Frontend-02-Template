@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div #id.class{
+            color:red;
+        }
+        #dd>p.pp{
+            font-size:60px;
+        }
+        .pp+#id{
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <div id='dd'>
+        <p class="pp">
+            pp
+        </p>
+        <div id='id' class='class'>
+            class1
+        </div>
+    </div>
+
+
+    <script>
+        /**
+         * 先只考虑一个父选择器,两个子选择器
+        */
+        function match(selector, element) {
+            const ele = element;
+            let isMatched = false
+            // 说明是简单选择器
+            if ((ele.id === selector) || (ele.className === selector) || (ele.tagName === selector.toUpperCase())) {
+                isMatched = true;
+            } else if (selector.split(' ').length > 1) { // 说明是后代选择器
+                const eleP1 = ele.parentNode
+                const eleC1 = ele.children
+                const p1 = selector.split(' ')[0] // 取第一个就是父级的选择器
+                const c1 = selector.split(' ')[1]
+                if ((p1.indexOf(ele.className) > -1) || (p1.indexOf(ele.tagName) > -1) || (p1.indexOf(ele.id) > -1)) { // 说明传进来的是选择器里的父选择器
+                    const c1Id = eleC1[0].id
+                    const c1class = eleC1[0].className
+                    const c1tag = eleC1[0].tagName.toLowerCase()
+                    const c2Id = eleC1[1].id
+                    const c2class = eleC1[1].className
+                    const c2tag = eleC1[1].tagName.toLowerCase()
+                    isMatched = (c1.includes(c1Id) && c1.includes(c2Id)) ||
+                    (c1.includes(c1Id) && c1.includes(c2class)) ||
+                    (c1.includes(c1Id) && c1.includes(c1class)) ||
+                    (c1.includes(c1Id) && c1.includes(c2tag)) ||
+                    (c1.includes(c1tag) && c1.includes(c1Id)) ||
+                    (c1.includes(c1tag) && c1.includes(c2Id)) ||
+                    (c1.includes(c1tag) && c1.includes(c2class))
+                  
+                } else if ((p1.indexOf(eleP1.className) > -1) || (p1.indexOf(eleP1.id) > -1) || (p1.indexOf(eleP1.tagName.toLowerCase()) > -1)) { // 否则传进来的就是子选择器
+                    if (c1.includes(ele.id) && c1.includes(ele.className)) { // 含id和class
+                        isMatched = true;
+                    } else if (c1.includes(ele.id) && c1.includes(ele.tagName.toLowerCase())) { // 含id和标签名
+                        isMatched = true;
+                    } else if (c1.includes(ele.tagName.toLowerCase()) && c1.includes(ele.className)) { // 含class和标签名
+                        isMatched = true;
+                    }
+                }
+            } else if (selector.split('>').length > 1) { // 说明是子代选择器
+                const eleP1 = ele.parentNode
+                const eleC1 = ele.children
+                const p1 = selector.split('>')[0] // 取第一个就是父级的选择器
+                const c1 = selector.split('>')[1]
+                if ((p1.indexOf(ele.className) > -1) || (p1.indexOf(ele.tagName) > -1) || (p1.indexOf(ele.id) > -1)) { // 说明传进来的是选择器里的父选择器
+                    const c1Id = eleC1[0].id
+                    const c1class = eleC1[0].className
+                    const c1tag = eleC1[0].tagName.toLowerCase()
+                    const c2Id = eleC1[1].id
+                    const c2class = eleC1[1].className
+                    const c2tag = eleC1[1].tagName.toLowerCase()
+                    isMatched = (c1.includes(c1Id) && c1.includes(c2Id)) ||
+                    (c1.includes(c1Id) && c1.includes(c2class)) ||
+                    (c1.includes(c1Id) && c1.includes(c1class)) ||
+                    (c1.includes(c1Id) && c1.includes(c2tag)) ||
+                    (c1.includes(c1tag) && c1.includes(c1Id)) ||
+                    (c1.includes(c1tag) && c1.includes(c2Id)) ||
+                    (c1.includes(c1tag) && c1.includes(c2class))
+                  
+                } else if ((p1.indexOf(eleP1.className) > -1) || (p1.indexOf(eleP1.id) > -1) || (p1.indexOf(eleP1.tagName.toLowerCase()) > -1)) { // 否则传进来的就是子选择器
+                    if (c1.includes(ele.id) && c1.includes(ele.className)) { // 含id和class
+                        isMatched = true;
+                    } else if (c1.includes(ele.id) && c1.includes(ele.tagName.toLowerCase())) { // 含id和标签名
+                        isMatched = true;
+                    } else if (c1.includes(ele.tagName.toLowerCase()) && c1.includes(ele.className)) { // 含class和标签名
+                        isMatched = true;
+                    }
+                }
+            } else if (selector.split('+').length > 1) { // 相邻兄弟选择器
+                const eleP1 = ele.parentNode
+                const eleC1 = ele.children
+                const p1 = selector.split('+')[0] // 取第一个就是父级的选择器
+                const c1 = selector.split('+')[1]
+                if ((p1.indexOf(ele.className) > -1) || (p1.indexOf(ele.tagName) > -1) || (p1.indexOf(ele.id) > -1)) { // 说明传进来的是选择器里的父选择器
+                    const c1Id = eleC1[0].id
+                    const c1class = eleC1[0].className
+                    const c1tag = eleC1[0].tagName.toLowerCase()
+                    const c2Id = eleC1[1].id
+                    const c2class = eleC1[1].className
+                    const c2tag = eleC1[1].tagName.toLowerCase()
+                    isMatched = (c1.includes(c1Id) && c1.includes(c2Id)) ||
+                    (c1.includes(c1Id) && c1.includes(c2class)) ||
+                    (c1.includes(c1Id) && c1.includes(c1class)) ||
+                    (c1.includes(c1Id) && c1.includes(c2tag)) ||
+                    (c1.includes(c1tag) && c1.includes(c1Id)) ||
+                    (c1.includes(c1tag) && c1.includes(c2Id)) ||
+                    (c1.includes(c1tag) && c1.includes(c2class))
+                  
+                } else if ((p1.indexOf(eleP1.className) > -1) || (p1.indexOf(eleP1.id) > -1) || (p1.indexOf(eleP1.tagName.toLowerCase()) > -1)) { // 否则传进来的就是子选择器
+                    if (c1.includes(ele.id) && c1.includes(ele.className)) { // 含id和class
+                        isMatched = true;
+                    } else if (c1.includes(ele.id) && c1.includes(ele.tagName.toLowerCase())) { // 含id和标签名
+                        isMatched = true;
+                    } else if (c1.includes(ele.tagName.toLowerCase()) && c1.includes(ele.className)) { // 含class和标签名
+                        isMatched = true;
+                    }
+                }
+            } else if (selector.split('~').length > 1) { // 后续兄弟选择器
+                const eleP1 = ele.parentNode
+                const eleC1 = ele.children
+                const p1 = selector.split('~')[0] // 取第一个就是父级的选择器
+                const c1 = selector.split('~')[1]
+                if ((p1.indexOf(ele.className) > -1) || (p1.indexOf(ele.tagName) > -1) || (p1.indexOf(ele.id) > -1)) { // 说明传进来的是选择器里的父选择器
+                    const c1Id = eleC1[0].id
+                    const c1class = eleC1[0].className
+                    const c1tag = eleC1[0].tagName.toLowerCase()
+                    const c2Id = eleC1[1].id
+                    const c2class = eleC1[1].className
+                    const c2tag = eleC1[1].tagName.toLowerCase()
+                    isMatched = (c1.includes(c1Id) && c1.includes(c2Id)) ||
+                    (c1.includes(c1Id) && c1.includes(c2class)) ||
+                    (c1.includes(c1Id) && c1.includes(c1class)) ||
+                    (c1.includes(c1Id) && c1.includes(c2tag)) ||
+                    (c1.includes(c1tag) && c1.includes(c1Id)) ||
+                    (c1.includes(c1tag) && c1.includes(c2Id)) ||
+                    (c1.includes(c1tag) && c1.includes(c2class))
+                  
+                } else if ((p1.indexOf(eleP1.className) > -1) || (p1.indexOf(eleP1.id) > -1) || (p1.indexOf(eleP1.tagName.toLowerCase()) > -1)) { // 否则传进来的就是子选择器
+                    if (c1.includes(ele.id) && c1.includes(ele.className)) { // 含id和class
+                        isMatched = true;
+                    } else if (c1.includes(ele.id) && c1.includes(ele.tagName.toLowerCase())) { // 含id和标签名
+                        isMatched = true;
+                    } else if (c1.includes(ele.tagName.toLowerCase()) && c1.includes(ele.className)) { // 含class和标签名
+                        isMatched = true;
+                    }
+                }
+            }
+            console.log(isMatched)
+            return isMatched;
+        }
+        match("div #id.class", document.getElementById("id"));
+        match("#dd>p.pp", document.getElementById("dd"));
+    </script>
+</body>
+</html>
