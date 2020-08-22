@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="a">
+        <span>1</span>
+        <p>2</p>
+        <a href="">3</a>
+        <div>4</div>
+    </div>
+    <script>
+        // 元素倒叙
+        let element = document.getElementById("a");
+        function reverseChildren(element) {
+            let range = new Range(); // 创建新的range
+            range.selectNodeContents(element);// 选中node的内容
+            let fragment = range.extractContents();
+
+            let j = fragment.childNodes.length;
+            while(j-- > 0) {
+                element.appendChild(fragment.childNodes[j]) // 从后往前依次把childappend到前面
+            }
+            element.appendChild(fragment);
+        }
+        reverseChildren(element)
+
+        
+    </script>
+</body>
+</html>

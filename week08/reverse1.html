@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="a">
+        <span>1</span>
+        <p>2</p>
+        <a href="">3</a>
+        <div>4</div>
+    </div>
+    <script>
+        // 元素倒叙
+        let element = document.getElementById("a");
+        function reverse1(element) {
+            let j = element.childNodes.length;
+            while(j-- > 0) {
+                element.appendChild(element.childNodes[j]) // 从后往前依次把childappend到前面
+            }
+        }
+        reverse1(element)
+
+        
+    </script>
+</body>
+</html>

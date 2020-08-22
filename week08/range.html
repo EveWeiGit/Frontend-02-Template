@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="a">3233<span style="background-color: pink;">4555533</span>233333</div>
+    <script>
+        let range = new Range();
+        range.setStart(document.getElementById("a").childNodes[1].childNodes[0], 3);
+        range.setEnd(document.getElementById("a").childNodes[2], 3);
+    </script>
+</body>
+</html>
