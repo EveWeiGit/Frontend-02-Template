@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .cell{
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            display: inline-block;
+            border:1px solid #fff;
+            vertical-align: middle;
+            line-height: 100px;
+            font-size: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="board"></div>
+    <script>
+        let pattern = [
+            [2,0,0],
+            [0,1,0],
+            [0,0,0],
+        ]
+        console.log(pattern);
+        let color = 1;
+
+        function show() {
+            let board = document.getElementById("board");
+            board.innerHTML = "";
+            for(let i = 0; i < 3; i++) {
+                for(let j = 0; j < 3; j++) {
+                    let cell = document.createElement("div");
+                    cell.classList.add("cell");
+                    cell.innerText = pattern[i][j] == 2 ? "❌" :
+                    pattern[i][j] == 1 ? "⭕️" : "";
+                    cell.addEventListener("click", () => move(j, i)); // 添加点击事件
+                    board.appendChild(cell);
+
+                }
+                board.appendChild(document.createElement("br"));
+            }
+        }
+        // x 相当于更里层的数组位置，y相当于更外层的数组位置
+        function move(x,y) {
+            pattern[y][x] = color;
+            color = 3 - color;
+            show();
+        }
+        show();
+        
+    </script>
+</body>
+</html>

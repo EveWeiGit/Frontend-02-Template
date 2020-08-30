@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Path</title>
+    <style>
+        .cell{
+            display: inline-block;
+            
+            width: 6px;
+            height: 6px;
+            background-color: grey;
+            border-bottom: 1px solid #fff;
+            border-right: 1px solid #fff;
+            vertical-align: top;
+        }
+        #container{
+            line-height: 7px;
+width: 701px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+<button onclick="localStorage['map'] = JSON.stringify(map)">save</button>
+
+<script>
+    let map = localStorage["map"] ? JSON.parse(localStorage['map']) : Array(10000).fill(0);
+    // console.log({map})
+    let container = document.getElementById("container");
+    for(let y = 0; y < 100; y++) {
+        for(let x = 0; x < 100; x++) {
+            let cell = document.createElement("div");
+            cell.classList.add("cell");
+            if (map[100 * y + x] == 1) { // 有墙用1来表示
+                cell.style.backgroundColor = "black";
+            }
+            cell.addEventListener("mousemove", () => {
+                if (mousedown) {
+                    // 左键建墙，右键清除
+                    if (clear) {
+                        cell.style.backgroundColor = "";
+                        map[100*y + x] = 0;
+                    } else {
+                        cell.style.backgroundColor = "black"; // 视觉上变成墙
+                        map[100*y + x] = 1;
+                    }
+                }
+            })
+            container.appendChild(cell);
+        }
+    }
+    let mousedown = false;
+    let clear = false;
+    document.addEventListener("mousedown", e => {
+        mousedown = true;
+        clear = (e.which === 3)
+    });
+    document.addEventListener("mouseup", () => mousedown = false);
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    function path(map, start, end) { // map:地图， start：起点， end:终点
+        let queue = [start];
+        function insert(x,y) {
+            if (x < 0 || x >= 100 || y < 0 || y >= 100) return; // 地图边
+
+            if (map[y * 100 + x]) return;
+
+            map[y * 100 + x] = 2; // 找过的点标记一下
+            queue.push([x,y]);
+        }
+        console.log({queue})
+        while(queue.length) {
+            let [x,y] = queue.shift();
+            console.log({x,y});
+            if (x === end[0] && y === end[1]) {
+                return true;
+            }
+            // 把start上下左右的四个点插入
+            insert(x - 1, y);
+            insert(x, y - 1);
+            insert(x + 1, y);
+            insert(x, y + 1);
+        }
+        return false;
+    }
+
+</script>
+</html>

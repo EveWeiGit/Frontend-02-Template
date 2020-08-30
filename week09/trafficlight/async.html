@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>traffic light</title>
+    <style>
+        div{
+            background-color: grey;
+            display: inline-block;
+            margin: 30px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+        }
+        .green.light{
+            background-color: green;
+        }
+        .yellow.light{
+            background-color: yellow;
+        }
+        .red.light{
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="green"></div>
+    <div class="yellow"></div>
+    <div class="red"></div>
+
+    <button id="next">next</button>
+    <script>
+        function trafficLight(color) {
+            let lights = document.getElementsByTagName("div");
+            for (let i = 0; i < 3; i++) {
+                lights[i].classList.remove("light")
+            }
+            document.getElementsByClassName(color)[0].classList.add("light");
+        }
+        function sleep(t) {
+            return new Promise((resolve, reject) => {
+                setTimeout(resolve, t);
+            })
+        }
+        // async function init() {
+        //     while(true) {
+        //         trafficLight("green");
+        //         await sleep(1000);
+        //         trafficLight("yellow");
+        //         await sleep(200);
+        //         trafficLight("red");
+        //         await sleep(500);
+        //     }
+        // }
+        
+        function happen(element, eventName) { // 手动控制
+            return new Promise((resolve, reject) => {
+                element.addEventListener(eventName, resolve, {once:true});
+            })
+        }
+
+        
+        async function init() {
+            const next = document.getElementById("next");
+            while(true) {
+                trafficLight("green");
+                await happen(next, "click");
+                trafficLight("yellow");
+                await happen(next, "click");
+                trafficLight("red");
+                await happen(next, "click");
+            }
+        }
+    </script>
+</body>
+</html>
