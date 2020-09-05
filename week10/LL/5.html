@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 圆括号表示捕获
+        var regexp = /([0-9\.]+)|([ \t]+)|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g
+        var dictionary = ["Number", "Whitespace", "LineTerminator", "*", "/", "+", "-"];
+        function* tokenize(source) {
+            var result = null;
+            var lastIndex = 0;
+            while(true) {
+                lastIndex = regexp.lastIndex;
+                result = regexp.exec(source);
+                if (!result) break;
+                if (regexp.lastIndex - lastIndex > result[0].length) break;
+
+                let token = {
+                    type:null,
+                    value:null,
+                }
+
+                for (let i = 0; i <= dictionary.length; i++) {
+                    if (result[i]) {
+                        token.type = dictionary[i - 1]
+                        // console.log(dictionary[i - 1]);
+                    }
+                }
+                token.value = result[0];
+                yield token;
+                // console.log(result);
+            }
+            yield {
+                type: "EOF",
+            }
+        }
+        let source = []
+        for(let token of tokenize("1 + 2 + 3")) {
+            // console.log(token);
+            if (token.type !== "Whitespace" && token.type !== "LineTerminator") source.push(token);
+        }
+
+        function Expression(source) {
+
+        }
+        
+        function AdditiveExpression(source) {
+            if (source[0].type === "MutiolicationExpression") {
+                let node = {
+                    type:"AdditiveExpression",
+                    children:[source[0]],
+                }
+                source[0] = node;
+               return AdditiveExpression(source);
+           }
+           if (source[0].type === "AdditiveExpression" && source[1] && source[1].type === "+") {
+                let node = {
+                    type:"AdditiveExpression",
+                    operator:"+",
+                    children:[],
+                }
+                node.children.push(source.shift());
+                node.children.push(source.shift());
+                MutiolicationExpression(source)
+                node.children.push(source.shift());
+                source.unshift(node);
+                return AdditiveExpression(source);
+            }
+           if (source[0].type === "AdditiveExpression" && source[1] && source[1].type === "-") {
+                let node = {
+                    type:"AdditiveExpression",
+                    operator:"-",
+                    children:[],
+                }
+                node.children.push(source.shift());
+                node.children.push(source.shift());
+                MutiolicationExpression(source)
+                node.children.push(source.shift());
+                source.unshift(node);
+                return AdditiveExpression(source);
+            }
+           if (source[0].type === "AdditiveExpression") {
+                return source[0];
+            }
+            // 第一次进来可能会进入下面的流程
+            MutiolicationExpression(source)
+            return AdditiveExpression(source);
+        }
+
+
+        function MutiolicationExpression(source) {
+            if (source[0].type === "Number") {
+                let node = {
+                    type:"MutiolicationExpression",
+                    children:[source[0]],
+                }
+                source[0] = node;
+                return MutiolicationExpression(source);
+            }
+            if (source[0].type === "MutiolicationExpression" && source[1] && source[1].type === "*") {
+                let node = {
+                    type:"MutiolicationExpression",
+                    operator:"*",
+                    children:[],
+                }
+                node.children.push(source.shift());
+                node.children.push(source.shift());
+                node.children.push(source.shift());
+                source.unshift(node);
+                return MutiolicationExpression(source);
+            }
+            
+            if (source[0].type === "MutiolicationExpression" && source[1] && source[1].type === "/") {
+                let node = {
+                    type:"MutiolicationExpression",
+                    operator:"/",
+                    children:[],
+                }
+                // 前三项
+                node.children.push(source.shift());
+                node.children.push(source.shift());
+                node.children.push(source.shift());
+                source.unshift(node);
+                return MutiolicationExpression(source);
+            }
+            // 递归结束
+            if (source[0].type === "MutiolicationExpression") {
+               
+                return source[0];
+            }
+            return MutiolicationExpression(source);
+
+        }
+        console.log(AdditiveExpression(source));
+
+        
+    </script>
+</body>
+</html>
