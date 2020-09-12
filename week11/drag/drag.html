@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag</title>
+    <style>
+        #drag{
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            background-color: greenyellow;
+        }
+    </style>
+</head>
+<body>
+    <div id="cantainer">
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+        我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，我是一段文字，
+
+    </div>
+    <div id="drag" ></div>
+    <script>
+        let drag = document.getElementById("drag");
+
+        let baseX = 0, baseY = 0;
+
+        drag.addEventListener("mousedown", e => {
+
+            let startX = e.clientX, startY = e.clientY;
+
+            let up = event => {
+                baseX = baseX + event.clientX - startX;
+                baseY = baseY + event.clientY - startY;
+                document.removeEventListener("mousemove", move)
+            document.removeEventListener("mouseup", up)
+            }
+            let move = event => {
+                // console.log(event);
+                let range = getNearest(event.clientX, event.clientY);
+                range.insertNode(drag);
+                // drag.style.transform = `translate(${baseX + event.clientX - startX}px,${baseY + event.clientY - startY}px)`
+                
+            }
+            document.addEventListener("mousemove", move)
+            document.addEventListener("mouseup", up)
+        })
+
+        let ranges = []
+
+        let container = document.getElementById("cantainer");
+        // 要取到文本节点里的文字的长度
+        for (let i = 0; i < container.childNodes[0].textContent.length; i++) {
+            let range = document.createRange();
+            // range 文字的start和end
+            range.setStart(container.childNodes[0],i);
+            range.setEnd(container.childNodes[0],i);
+            // console.log(range.getBoundingClientRect()); // CSSOM可以拿到range的位置
+            
+            ranges.push(range);
+        }
+        // 找到离point最近的位置
+        function getNearest(x,y) {
+            let min = Infinity; // 任何一个值都可以把min替换掉
+            let nearest = null; // 一开始没有
+            for (let range of ranges) {
+                // 这个方法返回一个矩形对象，包含四个属性：left、top、right和bottom。分别表示元素各边与页面上边和左边的距离。
+                let rect = range.getBoundingClientRect();// 不能直接取上面的，因为界面发生变化就会发生变化
+                let distance = (rect.x - x) ** 2 + (rect.y - y) ** 2;//计算距离, 不开根号，因为不用计算出具体值
+                if (distance < min) { // 说明新的range距离我们插入点最近的一个
+                    nearest = range;
+                    min = distance;
+                }
+            }
+            return nearest;
+        }
+        document.addEventListener("selectstart", e => e.preventDefault())
+    </script>
+</body>
+</html>
