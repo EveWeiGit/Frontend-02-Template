@@ -7,6 +7,8 @@
 
 
 
+
+
         {
             "type": "node",
             "request": "launch",
@@ -14,7 +16,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/week05/toyBroswer/client.js"
+            "program": "${workspaceFolder}/week10/Whildcard/Whildcard.js"
         }
     ]
 }
