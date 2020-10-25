@@ -44,8 +44,18 @@ npm i yeoman-generator -g
 
 ## 解决zsh: command not found: yo
 
+**全局安装yo**
+
 ```
 sudo npm i yo -g
 
 ```
 ![](./img/yo.png)
+
+## 解决yo toolofchain报错Cannot find module 'yeoman-generator'的时候
+
+**删掉node_modules,然后重新sudo npm i即可**
+
+![](./img/yo-file.png)
+
+
