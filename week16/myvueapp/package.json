@@ -1,5 +1,5 @@
 {
-  "name": "vue demo",
+  "name": "myvueapp",
   "version": "",
   "description": "",
   "main": "generators/app/index.js",
@@ -9,6 +9,7 @@
   "author": "wei",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.12.3",
     "copy-webpack-plugin": "^6.2.1",
     "css-loader": "^5.0.0",
     "vue-loader": "^15.9.3",
@@ -18,6 +19,7 @@
     "webpack-cli": "^4.1.0"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.12.1",
     "vue": "^2.6.12"
   }
 }

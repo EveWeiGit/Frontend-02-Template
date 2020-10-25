@@ -59,3 +59,11 @@ sudo npm i yo -g
 ![](./img/yo-file.png)
 
 
+## 解决webpack not installed
+
+**还要安装webpack-cli**
+
+![](./img/wb-uninstall.png)
+
+
+
