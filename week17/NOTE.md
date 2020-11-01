@@ -20,3 +20,7 @@ sudo chmod -R 777 文件路径
 ```
  rm -rf ./*
 ```
+
+# git push 报错
+
+![](./img/push-error.png)
