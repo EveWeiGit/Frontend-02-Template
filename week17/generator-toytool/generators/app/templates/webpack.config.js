@@ -17,10 +17,12 @@ module.exports = {
       },
       { 
         test: /\.js$/,
-        use: 'babel-loader',
+        use: {
+          loder:'babel-loader',
         options:{
-          presets:["env"]
+          presets:["@babel/preset-env"]
         }
+      }
       },
     ],
   },
