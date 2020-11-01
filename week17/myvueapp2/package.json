@@ -1,0 +1,17 @@
+{
+  "name": "myvueapp2",
+  "version": "",
+  "description": "",
+  "main": "generators/app/index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "mocha --require @babel/register",
+    "coverage": "nyc mocha --require @babel/register"
+  },
+  "author": "wei",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "vue": "^2.6.12"
+  }
+}
