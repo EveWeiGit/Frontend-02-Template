@@ -24,3 +24,5 @@ sudo chmod -R 777 文件路径
 # git push 报错
 
 ![](./img/push-error.png)
+
+临时解决办法：

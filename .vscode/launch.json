@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "node",
             "request": "launch",
@@ -18,7 +19,7 @@
             "args": [
 
             ],
-            "program": "${workspaceFolder}/week17/html-parser/src/parser.js"
+            "program": "${workspaceFolder}/week18/pulish-server/server.js"
         }
     ]
 }

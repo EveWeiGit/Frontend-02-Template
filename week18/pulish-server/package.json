@@ -1,0 +1,14 @@
+{
+  "name": "pulish-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish": "scp -P 8022 -r ./* eve@127.0.0.1:/home/eve/pulish-server",
+    "start": "node ./server.js"
+
+  },
+  "author": "",
+  "license": "ISC"
+}
