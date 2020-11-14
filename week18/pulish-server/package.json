@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish": "scp -P 8022 -r ./* eve@127.0.0.1:/home/eve/pulish-server",
+    "publish": "scp -P 8022 -r ./* eve@127.0.0.1:/home/eve/publish-server",
     "start": "node ./server.js"
-
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "unzipper": "^0.10.11"
+  }
 }

@@ -12,14 +12,14 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeArgs": [
-                "--require","@babel/register"
-            ],
+            // "runtimeArgs": [
+            //     "--require","@babel/register"
+            // ],
             "sourceMaps": true,
             "args": [
 
             ],
-            "program": "${workspaceFolder}/week18/pulish-server/server.js"
+            "program": "${workspaceFolder}/week18/publish-tool/publish.js"
         }
     ]
 }
