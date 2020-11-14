@@ -441,7 +441,231 @@ http.createServer((req, res) => {
 
 ![](./img/unzip.png)
 
-## 总结
+
+## Github oAuth 登录实例
+
+- 先从GitHub主页的settings进去，然后在左边列表找到Developer settings进去
+
+![](./img/github01.png)
+
+- 然后选择New Github App
+
+![](./img/github02.png)
+
+- New Github App填写内容
+![](./img/github03.png)
+![](./img/github04.png)
+![](./img/github05.png)
+
+- 提交后获取私钥
+![](./img/github06.png)
+
+- 参考oAuth的文档
+https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/
+
+- oAth的总体思路
+  * publish-tool打开https://github.com/login/oauth/authorize?client_id=xxx
+  * publish-server的auth路由：接收code,用code+client_id +client-secret换取token
+  * 创建server，接收token，点击发布
+  * 用token获取用户信息，检查权限
+  * publish路由：接收发布
+
+- 修改publish.js代码
+
+```javascript
+
+let http = require('http');
+
+let fs = require("fs");
+
+let archiver = require("archiver");
+
+let child_process = require("child_process");
+
+// 打开https://github.com/login/oauth/authorize
+
+child_process.exec(`open https://github.com/login/oauth/authorize?client_id=Iv1.73af973ded44837a`)
+
+// 创建server，接收token，点击发布
+
+
+
+     // 创建archiver实例
+    const  archive = archiver('zip', {
+        zlib:{level:9}
+    })
+
+    archive.directory('./sample/', false);
+
+    archive.finalize(); // 填好压缩内容
+    archive.pipe(fs.createWriteStream("tmp.zip"))
+    
+    archive.pipe(request);
+   
+```
+然后运行publish.js,浏览器会自动打开授权页面
+
+![](./img/github07.png)
+
+- 完整版publish.js代码
+```javascript
+
+let http = require('http');
+
+let fs = require("fs");
+
+let archiver = require("archiver");
+let querystring = require('querystring');
+
+let child_process = require("child_process");
+
+// 打开https://github.com/login/oauth/authorize
+
+child_process.exec(`open https://github.com/login/oauth/authorize?client_id=xxx`)
+
+// 创建server，接收token，点击发布
+
+
+http.createServer((req, res) => {
+    let query = querystring.parse(req.url.match(/^\/\?([\s\S]+)$/)[1]);
+    // console.log({query});
+    publish(query.token)
+}).listen(8083);
+
+function publish(token){
+ let request = http.request({
+        hostname:"127.0.0.1",
+        port:8082,
+        // port:8882,
+        method: "POST",
+        path:`/publish?token=${token}`,
+        headers:{
+            'Content-Type':'application/octet-stream', // 流式传输的类型
+            // 'Conten-Length':stats.size,
+        }
+    }, response => {
+        console.log(response);
+        
+    })
+    let file = fs.createReadStream("./sample/sample.html");
+// 创建archiver实例
+    const  archive = archiver('zip', {
+        zlib:{level:9}
+    })
+
+    archive.directory('./sample/', false);
+
+    archive.finalize(); // 填好压缩内容
+    archive.pipe(fs.createWriteStream("tmp.zip"))
+    
+    archive.pipe(request);
+}
+
+```
+
+
+- 完整版server.js代码
+```javascript
+let http = require('http');
+let https = require('https');
+// let fs = require('fs');
+let unzipper = require('unzipper');
+let querystring = require('querystring');
+
+
+function auth(req, res) {
+let query = querystring.parse(req.url.match(/^\/auth\?([\s\S]+)$/)[1]);
+// console.log({query});
+getToken(query.code, function (info) {
+    // res.write(JSON.stringify(info));
+    res.write(`<a href='http://localhost:8083/?token=${info.access_token}'>publish</a>`);
+    res.end();
+    // console.log(info);
+})
+}
+function getToken(code, callback) {
+
+    let request = https.request({
+        hostname:"github.com",
+        path:`/login/oauth/access_token?code=${code}&client_id=Ixxx&client_secret=xxx`,
+        port:443,
+        method:"POST",
+    }, function(response){
+        console.log(response);
+        let body = ""
+        response.on('data', chunk => {
+            console.log(chunk.toString());
+            body += chunk.toString()
+        })
+        response.on('end', chunk => {
+            // let o = querystring.parse(body)
+            // console.log(o);
+            callback(querystring.parse(body))
+        })
+    })
+    request.end();
+}
+function publish(req, res) {
+let query = querystring.parse(req.url.match(/^\/publish\?([\s\S]+)$/)[1]);
+getUser(query.token, info => {
+    if (info.login === 'EveWeiGit') {
+    req.pipe(unzipper.Extract({path:'../server/public/'}));
+    req.on('end', function() {
+        res.end('success');
+    })
+    }
+})
+    
+}
+
+function getUser(token, callback) {
+    let request = https.request({
+        hostname:"api.github.com",
+        path:`/user`,
+        port:443,
+        method:"GET",
+        headers:{
+            "Authorization": `token ${token}`,
+            "User-Agent":"wei-publish",
+        }
+    }, function(response){
+        // console.log(response);
+        let body = ""
+        response.on('data', chunk => {
+            console.log(chunk.toString());
+            body += chunk.toString()
+        })
+        response.on('end', chunk => {
+            let o = JSON.parse(body)
+            console.log('o', o, o.login);
+            callback(o)
+        })
+    })
+    request.end();
+}
+
+http.createServer((req, res) => {
+    // console.log('req');
+
+    if(req.url.match(/^\/auth\?/)) {
+        return auth(req, res)
+    }
+    if(req.url.match(/^\/publish\?/)) {
+        return publish(req, res)
+    }
+
+}).listen(8082);
+```
+
+- 先启动监听server.js
+- 然后运行publish.js,
+
+![](./img/github08.png)
+
+- 点击publish
+  就可以发布了，先把之前的server/public/ 下的文件删除，这样操作后就可以看到发布过去的图片和sample.html了
+
+
 
 
 
